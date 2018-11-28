@@ -1,8 +1,13 @@
 
 package dao;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import model.Cidade;
 import model.Cliente;
+import model.Estado;
 
 /**
  *
@@ -59,6 +64,57 @@ public class ClienteDAO {
         Conexao.executar(sql);
                 
                
+    }
+    
+    public static List<Cliente> getClientes() {
+        List<Cliente> lista = new ArrayList<>();
+        
+        String sql = "SELECT c.codigo, c.nome, c.telefone, c.cpf, "
+                + "c.salario, c.filhos, c.casado, c.datanascimento, "
+                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome "
+                + "FROM clientes c "
+                + "INNER JOIN cidades m ON m.codigo = c.codCidade "
+                + "INNER JOIN estados e ON e.codigo = m.codEstado "
+                + "ORDER BY c.nome ";
+        
+                ResultSet rs = Conexao.consultar(sql);
+                if( rs != null){
+                    try {
+                        
+                        while( rs.next()){
+                            Estado estado = new Estado();
+                            estado.setCodigo( rs.getInt(12));
+                            estado.setNome(rs.getString(13));
+                            
+                            Cidade cidade = new Cidade();
+                            cidade.setCodigo(rs.getInt(10));
+                            cidade.setNome(rs.getString(11));
+                            cidade.setEstado(estado);
+                            
+                            Cliente cliente = new Cliente(); 
+                            cliente.setCodigo( rs.getInt(1));
+                            cliente.setNome(rs.getString(2)); 
+                            cliente.setTelefone(rs.getString(3)); 
+                            cliente.setCpf(rs.getString(4)); 
+                            cliente.setSalario(rs.getDouble(5)); 
+                            cliente.setTemFilhos(rs.getBoolean(6)); 
+                            cliente.setCasado(rs.getBoolean(7)); 
+                            cliente.setSexo(rs.getString(8));
+                            
+                            Calendar nascimento = Calendar.getInstance();
+                            
+                            
+                            
+                            
+                        }
+                        
+                    } catch (Exception e) {
+                        
+                    }
+                }
+        
+        return lista;
+       
     }
     
 }
