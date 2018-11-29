@@ -1,14 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import dao.CidadeDAO;
+import dao.ClienteDAO;
 import dao.EstadoDAO;
+import java.util.Calendar;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import model.Cidade;
 import model.Cliente;
 import model.Estado;
@@ -206,6 +204,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Salário:");
 
+        txtSalario.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         txtSalario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSalarioActionPerformed(evt);
@@ -371,8 +370,66 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cmbEstadoItemStateChanged
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        Cliente cliente = new Cliente();
-        cliente.setNome(txtNome.getText());
+        String nome = txtNome.getText();
+        String cpf = txtCPF.getText();
+        Cidade cidade = (Cidade) cmbCidade.getSelectedItem();
+        boolean cpfOK = true;
+        
+        
+        try {
+        String ultimoNumero = cpf.substring(13);
+        Integer.valueOf(ultimoNumero);
+        } catch (Exception e) {
+            cpfOK = false;
+        }
+        
+        
+        if( nome.isEmpty() || !cpfOK || cidade.getCodigo() == 0 ){
+            JOptionPane.showMessageDialog(this, "Os campos Nome, CPF e Cidade são obrigatórios!");
+        }else{
+           Cliente cliente = new Cliente();
+           cliente.setNome( txtNome.getText() ); 
+           cliente.setTelefone( txtTelefone.getText());
+           cliente.setCpf(cpf); 
+           String salario = txtSalario.getText();
+           if( !salario.isEmpty() ){
+               salario = salario.replace(",", ".");
+               cliente.setSalario( Double.valueOf( salario ) );
+           }else{
+               cliente.setSalario( 0 );
+           }
+           
+           cliente.setTemFilhos( cbTemFilhos.isSelected() );
+           cliente.setCasado( cbCasado.isSelected() );
+           
+           if( rbFeminino.isSelected() ){
+               cliente.setSexo("f");
+           }else{
+               if( rbMasculino.isSelected()){
+                   cliente.setSexo("m");
+               }else{
+                   cliente.setSexo("");
+               }
+           }
+           
+           String data = txtNascimento.getText();
+           int dia = Integer.valueOf( data.substring(0, 2) ); 
+           int mes = Integer.valueOf( data.substring(3, 5) ) -1; 
+           int ano = Integer.valueOf( data.substring( 6 ) ); 
+           Calendar nascimento = Calendar.getInstance();
+           nascimento.set(ano, mes, dia);
+           cliente.setNascimento(nascimento); 
+           cliente.setCidade(cidade);
+           
+            ClienteDAO.inserir(cliente);
+           
+        }
+        
+        
+        
+        
+        
+        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
 

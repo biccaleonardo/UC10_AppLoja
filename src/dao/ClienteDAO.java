@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.swing.JOptionPane;
 import model.Cidade;
 import model.Cliente;
 import model.Estado;
@@ -21,15 +22,15 @@ public class ClienteDAO {
                 + "-" + cliente.getNascimento().get(Calendar.DAY_OF_MONTH);
         String sql ="INSERT INTO clientes "
                 + "(nome, telefone, cpf, salario, filhos, casado, sexo, dataNascimento, codCidade) VALUES("
-                + "' "+cliente.getNome()        +"' , "
-                + "' "+cliente.getTelefone()    +"' , "
-                + "' "+cliente.getCpf()         +"' , "
+                + " '"+cliente.getNome()        +"' , "
+                + " '"+cliente.getTelefone()    +"' , "
+                + " '"+cliente.getCpf()         +"' , "
                 + "  "+cliente.getSalario()     +"  , "
                 + "  "+cliente.isTemFilhos()    +"  , "
                 + "  "+cliente.isCasado()       +"  , "
-                + "' "+cliente.getSexo()        +"' , "
-                + "' "+data                     +"' , "
-                + "' "+cliente.getCidade().getCodigo()                
+                + " '"+cliente.getSexo()        +"' , "
+                + " '"+data                     +"' , "
+                + "  "+cliente.getCidade().getCodigo()                
                 + " ) " ;
         Conexao.executar(sql);
                 
@@ -70,8 +71,10 @@ public class ClienteDAO {
         List<Cliente> lista = new ArrayList<>();
         
         String sql = "SELECT c.codigo, c.nome, c.telefone, c.cpf, "
-                + "c.salario, c.filhos, c.casado, c.datanascimento, "
-                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome "
+                + "c.salario, c.filhos, c.casado, "
+                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome, DATE_FORMAT( c.dataNascimento , '%d' ) , "
+                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome, DATE_FORMAT( c.dataNascimento , '%m' ) , "
+                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome, DATE_FORMAT( c.dataNascimento , '%Y' )  "
                 + "FROM clientes c "
                 + "INNER JOIN cidades m ON m.codigo = c.codCidade "
                 + "INNER JOIN estados e ON e.codigo = m.codEstado "
@@ -83,12 +86,12 @@ public class ClienteDAO {
                         
                         while( rs.next()){
                             Estado estado = new Estado();
-                            estado.setCodigo( rs.getInt(12));
-                            estado.setNome(rs.getString(13));
+                            estado.setCodigo( rs.getInt(11));
+                            estado.setNome(rs.getString(12));
                             
                             Cidade cidade = new Cidade();
-                            cidade.setCodigo(rs.getInt(10));
-                            cidade.setNome(rs.getString(11));
+                            cidade.setCodigo(rs.getInt(9));
+                            cidade.setNome(rs.getString(10));
                             cidade.setEstado(estado);
                             
                             Cliente cliente = new Cliente(); 
@@ -102,6 +105,11 @@ public class ClienteDAO {
                             cliente.setSexo(rs.getString(8));
                             
                             Calendar nascimento = Calendar.getInstance();
+                            nascimento.set(rs.getInt(15), rs.getInt(14), rs.getInt(13));
+                            cliente.setNascimento(nascimento); 
+                            cliente.setCidade(cidade); 
+                            
+                            lista.add(cliente);
                             
                             
                             
@@ -109,7 +117,7 @@ public class ClienteDAO {
                         }
                         
                     } catch (Exception e) {
-                        
+                        JOptionPane.showMessageDialog(null, e.toString());
                     }
                 }
         
