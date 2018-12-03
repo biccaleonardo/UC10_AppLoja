@@ -200,6 +200,11 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
         btnLimpar.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Salário:");
@@ -431,6 +436,18 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+       txtNome.setText("");
+    txtTelefone.setText("");
+    txtCPF.setText("");
+    txtNascimento.setText("");
+    txtSalario.setText("");
+    buttonGroupSexo.clearSelection();
+    cbCasado.setSelected(false);
+    cbTemFilhos.setSelected(false);
+    cmbEstado.setSelectedIndex(0);
+    }//GEN-LAST:event_btnLimparActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

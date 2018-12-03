@@ -72,9 +72,10 @@ public class ClienteDAO {
         
         String sql = "SELECT c.codigo, c.nome, c.telefone, c.cpf, "
                 + "c.salario, c.filhos, c.casado, "
-                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome, DATE_FORMAT( c.dataNascimento , '%d' ) , "
-                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome, DATE_FORMAT( c.dataNascimento , '%m' ) , "
-                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome, DATE_FORMAT( c.dataNascimento , '%Y' )  "
+                + "c.sexo, m.codigo, m.nome, e.codigo, e.nome, "
+                + "DATE_FORMAT( c.dataNascimento , '%d' ) , "
+                + "DATE_FORMAT( c.dataNascimento , '%m' ) , "
+                + "DATE_FORMAT( c.dataNascimento , '%Y' )  "
                 + "FROM clientes c "
                 + "INNER JOIN cidades m ON m.codigo = c.codCidade "
                 + "INNER JOIN estados e ON e.codigo = m.codEstado "
@@ -105,7 +106,7 @@ public class ClienteDAO {
                             cliente.setSexo(rs.getString(8));
                             
                             Calendar nascimento = Calendar.getInstance();
-                            nascimento.set(rs.getInt(15), rs.getInt(14), rs.getInt(13));
+                            nascimento.set(rs.getInt(15), (rs.getInt(14)-1), rs.getInt(13));
                             cliente.setNascimento(nascimento); 
                             cliente.setCidade(cidade); 
                             
