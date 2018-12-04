@@ -1,5 +1,6 @@
 package view;
 
+import com.oracle.jrockit.jfr.DataType;
 import dao.CidadeDAO;
 import dao.ClienteDAO;
 import dao.EstadoDAO;
@@ -20,11 +21,32 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     /**
      * Creates new form FrmCliente
      */
+    
+    private Cliente cliente;
+    
     public FrmCliente() {
         initComponents();
         carregarEstados();
         carregarCidades( 0 );
+        cliente = null;
+        lblCodigo.setVisible(false);
+        lblCodigoValor.setVisible(false);
+    } 
+     public FrmCliente(int codigo) {
+        initComponents();
+        carregarEstados();
+        carregarCidades( 0 );
+        cliente = ClienteDAO.getClienteByCodigo(codigo);
+         carregarFormulario();
+         lblCodigo.setVisible(true);
+         lblCodigoValor.setVisible(true);
+         
     }
+     
+     private void carregarFormulario(){
+         txtNome.setText(cliente.getNome()); 
+         lblCodigoValor.setText(String.valueOf(cliente.getCodigo()));
+     }
 
     private void carregarEstados(){
         List<Estado> lista = EstadoDAO.getEstados();

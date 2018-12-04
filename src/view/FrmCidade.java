@@ -24,6 +24,7 @@ public class FrmCidade extends javax.swing.JInternalFrame {
      * Creates new form FrmCidade
      */
     private Cidade cidade; 
+    private ListCidades telaListCidades;
     
     
     public FrmCidade() {
@@ -34,7 +35,8 @@ public class FrmCidade extends javax.swing.JInternalFrame {
         cidade = null;
     }
     
-    public FrmCidade(int codigo) {
+    public FrmCidade(int codigo, ListCidades telaListCidades) {
+        this.telaListCidades = telaListCidades;
         initComponents();
         lblCodigo.setVisible(true);
         lblCodigoValor.setVisible(true); 
@@ -197,6 +199,8 @@ public class FrmCidade extends javax.swing.JInternalFrame {
                 CidadeDAO.inserir(cidade); 
             }else{
                 CidadeDAO.editar(cidade);
+                telaListCidades.carregarTabela();
+                this.dispose();
             }
             
             txtNome.setText(""); 

@@ -104,6 +104,11 @@ public class ListCidades extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         cmbEstados = new javax.swing.JComboBox<>();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Lista de Cidades");
 
@@ -228,7 +233,7 @@ public class ListCidades extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Você deve selecionar uma Cidade!");
         }else{
             int codigo = (int) tableCidades.getValueAt(linha, 0);
-            FrmCidade tela = new FrmCidade(codigo);
+            FrmCidade tela = new FrmCidade(codigo, this);
             jdpTelaInicial.add(tela);
             tela.setVisible(true);
             
